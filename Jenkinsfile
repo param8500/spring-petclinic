@@ -28,7 +28,7 @@ pipeline {
     stage('Deploy to GKE') {
       steps{
         wrap([$class: 'GCloudBuildWrapper', credentialsId: 'expanded-metric-364406']) {
-          gcloud container clusters get-credentials mycluster --region us-central1 --project expanded-metric-364406
+          sh 'gcloud container clusters get-credentials mycluster --region us-central1 --project expanded-metric-364406'
           sh 'helm upgrade --install petclinc petclinc-chart/ '
         }
             }
