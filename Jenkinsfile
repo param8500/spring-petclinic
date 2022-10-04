@@ -25,17 +25,12 @@ pipeline {
         }
       }
     }*/
-
     stage('Deploy to GKE') {
-            steps{
-                step([
-                $class: 'KubernetesEngineBuilder',
-                projectId: expanded-metric-364406,
-                clusterName: mycluster,
-                location: us-central1,
-                credentialsId: expanded-metric-364406])
-                sh 'helm upgrade --install petclinc petclinc-chart/ '
-
+      steps{
+        wrap([$class: 'GCloudBuildWrapper', credentialsId: 'expanded-metric-364406']) {
+          gcloud container clusters get-credentials mycluster --region us-central1 --project expanded-metric-364406
+          sh 'helm upgrade --install petclinc petclinc-chart/ '
+        }
             }
     }    
   }
