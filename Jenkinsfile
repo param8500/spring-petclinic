@@ -18,6 +18,13 @@ pipeline {
         
       }
     }
+    stage('deploy to GKE'){
+      steps{
+        withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s', namespace: '', serverUrl: '') {
+       sh helm upgrade --install petclinc petclinc-chart/
+        }
+      }
+    }
 
   }
 }
