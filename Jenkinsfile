@@ -18,13 +18,25 @@ pipeline {
         
       }
     }
-    stage('deploy to GKE'){
+    /*stage('deploy to GKE'){
       steps{
         withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s', namespace: '', serverUrl: '') {
         sh 'helm upgrade --install petclinc petclinc-chart/ '
         }
       }
-    }
+    }*/
 
+    stage('Deploy to GKE') {
+            steps{
+                step([
+                $class: 'KubernetesEngineBuilder',
+                projectId: expanded-metric-364406,
+                clusterName: mycluster,
+                location: us-central1,
+                credentialsId: expanded-metric-364406])
+                sh 'helm upgrade --install petclinc petclinc-chart/ '
+
+            }
+    }    
   }
 }
